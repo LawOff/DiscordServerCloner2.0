@@ -1,0 +1,12 @@
+{
+    "token":false,
+    "prefix": "!",
+    "logs": true,
+    "copy_settings": {
+        "categories": true,
+        "channels": true,
+        "roles": true,
+        "permissions": true,
+        "emojis": true
+    }
+}
