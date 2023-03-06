@@ -24,7 +24,10 @@ except Exception:
   print("Restarting...")
   os.execl(sys.executable, sys.executable, *sys.argv)
 
-client = Client(intents=Intents.all())
+try:
+  client = Client(intents=Intents.all())
+except Exception as e:
+  print("> Failed to create Discord client: ", e)
 
 with open("./utils/config.json", "r") as json_file:
   data = json.load(json_file)
