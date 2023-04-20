@@ -47,21 +47,25 @@ def clear(option=False):
 
 
 async def clone_server():
-  start_time = time.time()
-  guild_from = client.get_guild(int(INPUT_GUILD_ID))
-  print(" ")
-  guild_to = client.get_guild(await Cloner.guild_create(client, guild_from))
-  await Cloner.channels_delete(guild_to)
-  if data["copy_settings"]["roles"]:
-    await Cloner.roles_create(guild_to, guild_from)
-  if data["copy_settings"]["categories"]:
-    await Cloner.categories_create(guild_to, guild_from)
-  if data["copy_settings"]["channels"]:
-    await Cloner.channels_create(guild_to, guild_from)
-  if data["copy_settings"]["emojis"]:
-    await Cloner.emojis_create(guild_to, guild_from)
-  print("\n> Done Cloning Server in " +
-        str(round(time.time() - start_time, 2)) + " seconds")
+    start_time = time.time()
+    guild_from = client.get_guild(int(INPUT_GUILD_ID))
+    print(" ")
+    guild_to = client.get_guild(int(GUILD))
+    
+    # Edit the server name and icon
+    await Cloner.guild_create(guild_to, guild_from)
+    
+    await Cloner.channels_delete(guild_to)
+    if data["copy_settings"]["roles"]:
+        await Cloner.roles_create(guild_to, guild_from)
+    if data["copy_settings"]["categories"]:
+        await Cloner.categories_create(guild_to, guild_from)
+    if data["copy_settings"]["channels"]:
+        await Cloner.channels_create(guild_to, guild_from)
+    if data["copy_settings"]["emojis"]:
+        await Cloner.emojis_create(guild_to, guild_from)
+    print("\n> Done Cloning Server in " +
+          str(round(time.time() - start_time, 2)) + " seconds")
 
 
 @client.event
@@ -113,14 +117,17 @@ class ClonerBot:
       self.edit_settings_function()
     self.clear()
 
-    self.INPUT_GUILD_ID = Prompt.ask("\n> Enter the Server ID")
+    self.GUILD = Prompt.ask('\n> Enter the Server ID you want to edit (Create a Server Manully)')
     sleep(0.5)
 
-    return self.INPUT_GUILD_ID, self.TOKEN
+    self.INPUT_GUILD_ID = Prompt.ask("\n> Enter the Server ID you want to copy from")
+    sleep(0.5)
+
+    return self.INPUT_GUILD_ID, self.TOKEN, self.GUILD
 
 
 if __name__ == "__main__":
-  INPUT_GUILD_ID, TOKEN = ClonerBot().main()
+  INPUT_GUILD_ID, TOKEN, GUILD = ClonerBot().main()
   try:
     client.run(TOKEN, bot=False)
     clear()
