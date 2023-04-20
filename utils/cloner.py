@@ -35,8 +35,7 @@ def logs(message, type, number=None):
 class Cloner:
 
   @staticmethod
-  async def guild_create(client, guild_from: discord.Guild):
-    guild_to = await client.create_guild(guild_from.name)
+  async def guild_create(guild_to: discord.Guild, guild_from: discord.Guild):
     try:
       try:
         icon_image = await guild_from.icon_url_as(format='jpg').read()
@@ -50,10 +49,9 @@ class Cloner:
           logs(f"Guild Icon Changed: {guild_to.name}", 'add')
         except Exception:
           logs(f"Error While Changing Guild Icon: {guild_to.name}", 'error')
-    except discord.Forbidden:
+    except discord.errors.Forbidden:
       logs(f"Error While Changing Guild Icon: {guild_to.name}", 'error')
     logs(f"Cloned server: {guild_to.name}", 'add', True)
-    return guild_to.id
 
   @staticmethod
   async def roles_create(guild_to: discord.Guild, guild_from: discord.Guild):
